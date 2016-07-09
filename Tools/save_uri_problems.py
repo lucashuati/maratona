@@ -66,7 +66,6 @@ class user_Uri():
         submissions_table = []
         problems_id_table = []
         problems_language_table = []
-        print problems_pages_url
         while(True):
             problems_url = problems_pages_url + str(problems_pages)
             page = self.session.get(problems_url).text
