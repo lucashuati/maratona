@@ -3,29 +3,26 @@
 using namespace std;
 
 int main(){
-	int n;
-	bool inicio = true;
-	while(scanf("%d", &n), n){
-		if(!inicio){
-			printf("\n");
-		}else{
-			inicio = false;
-		}
-		vector<string> palavras;
-		int espacos = 0;
-		for(int i = 0; i < n; i++){
-			string aux;
-			cin >> aux;
-			palavras.push_back(aux);
-			if(aux.size() > espacos)
-				espacos = aux.size();
-		}
-		for (int i = 0; i < palavras.size(); ++i){
-			for(int j = 0; j < espacos - palavras[i].size(); j++)
-				printf(" ");
-			cout << palavras[i];
-			printf("\n");
-		}
-	}
-	return 0;
+  string str1, str2;
+  while (getline(cin,str1)) {
+    getline(cin,str2);
+    bool fim = false;
+    for (size_t i = str1.size(); i >= 0; i--) {
+      for (size_t j = 0; j + i <= str1.size(); j++) {
+          string sub = str1.substr(j,i);
+          size_t find = str2.find(sub);
+          //cout << sub << endl;
+          if(find != string::npos){
+            printf("%d\n",(int)sub.size());
+            fim = true;
+            break;
+          }
+      }
+      if(fim)
+        break;
+    }
+    if(!fim)
+      printf("0\n");
+  }
+  return 0;
 }

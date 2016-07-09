@@ -1,120 +1,132 @@
 #include <bits/stdc++.h>
-#define inf 999999
- 
+#define inf 0x3f3f3f3f
+
 using namespace std;
- 
+#define TAM 300000
+
 typedef struct aresta{
   int u,v;
   int w;
 }aresta;
- 
+int dist[TAM];
+bool comp(int u, int v){
+    return dist[u] > dist[v];
+}
+
 int main(){
-  int n;
-  while(scanf("%d",&n), n){
-    string origem, destino;
-    cin >> origem >> destino;
-    int ia = 1;
-    vector<aresta> edges;
-    vector<int> vertices;
-    map<string,int> mm;
-    map<int,string> mr;
-    vertices.push_back(0);
-    int t = 0;
-    for (int i = 0; i < n; i++) {
-      string str1, str2, str3;
-      cin >> str1 >> str2 >> str3;
-      for(int j = 'a'; j <= 'z'; j++){
-        string str4 = str1;
-        str4 += '.';
-        str4 += j;
-        if(mm.count(str4) == 0){
-          mm[str4] = ia;
-          mr[ia] = str4;
-          vertices.push_back(ia);
-          ia++;
+
+    int caso = 1;
+    cin.sync_with_stdio(false);
+    int n;
+    while(cin >> n, n != 0){
+        vector< pair<int,int> >g[TAM];
+        int qte = 2;
+        string origem, destino;
+        map<string,int> mm;
+        vector<aresta> arestas;
+        vector<int> vertices;
+        cin >> origem >> destino;
+        //cout << origem << " " << destino << endl;
+        int ia = 1;
+        vertices.push_back(0);
+        mm[origem] = 1;
+        ia+=27;
+        //cout << ia << endl;
+        for(int i = 1; i < 27; i++){
+          aresta aux;
+          aux.u = 1;
+          aux.v = 1+i;
+          aux.w = 0;
+          arestas.push_back(aux);
+          g[aux.u].push_back(make_pair(aux.v,aux.w));
+          char k = i+96;
+         // cout << origem << "(" << aux.u << ")" << "->" << origem << "." << k << "(" << aux.v << ")" << endl;
         }
-        str4 = str2;
-        str4 += '.';
-        str4 += j;
-        if(mm.count(str4) == 0){
-          mm[str4] = ia;
-          mr[ia] = str4;
-          vertices.push_back(ia);
-          ia++;
-        }
+        int d = ia;
+        mm[destino] = ia;
+        ia+=27;
+        for(int i = 1; i < 27; i++){
+          aresta aux;
+          aux.u = d+i;
+          aux.v = d;
+          aux.w = 0;
+          char k = i+96;
+          arestas.push_back(aux);
+        g[aux.u].push_back(make_pair(aux.v,aux.w));
+         // cout << destino << "." << k <<"(" << aux.u << ")" << "->" << destino << "." << k << "(" << aux.v << ")" << endl;
       }
-      for(int j = 'a'; j <= 'z'; j++){
-        string str4 = str1, str5 = str2;
-        str4 += '.'; str5 += '.';
-        str4 += str3[0]; str5 += j;
-        aresta aux;
-        //cout << str4 << " " << mm[str4] << " " << str5 << " " << mm[str5] << endl;
-        if(j != str3[0]){
-          aux.u = mm[str4];
-          aux.v = mm[str5];
-          aux.w = str3.size();
-          edges.push_back(aux);
+        for (int i = 0; i < n; i++) {
+          string str1, str2, str3;
+          cin >> str1 >> str2 >> str3;
+          //cout << str1 << " " << str2 << endl;
+          int U = mm[str1];
+          int V = mm[str2];
+          if(U == 0){
+              qte++;
+            //  cout << "nao achei U" << endl;
+              mm[str1] = ia;
+              U = ia;
+              ia+=27;
+          }
+          if(V == 0){
+              qte++;
+             // cout << "nao achei V" << endl;
+              mm[str2] = ia;
+              V = ia;
+              ia+=27;
+          }
+          for(int i = 1; i < 27; i++){
+            if(i+96 != str3[0]){
+                aresta aux;
+                aux.u = U+1+str3[0]-97;
+                aux.v = V+i;
+                aux.w = str3.size();
+                char k = i+96;
+                //cout << str1 << "." << str3[0] << "(" << aux.u << ")" << "->" << str2 << "." << k << "(" << aux.v << ")" << endl;
+                arestas.push_back(aux);
+                g[aux.u].push_back(make_pair(aux.v,aux.w));
+            }
         }
-        //cout << mm[str4] << " " << str5 << " "<< aux.w << " " << edges.size()-1<< endl;
-        str4 = str2; str5 = str1;
-        str4 += '.'; str5 += '.';
-        str4 += str3[0]; str5 += j;
-        if(j != str3[0]){
-          aux.u = mm[str4];
-          aux.v = mm[str5];
-          aux.w = str3.size();
-          edges.push_back(aux);
+           for(int i = 1; i < 27; i++){
+               if(i+96 != str3[0]){
+                   aresta aux;
+                   aux.u = V+1+str3[0]-97;
+                   aux.v = U+i;
+                   aux.w = str3.size();
+                   char k = i+96;
+                   //cout << str2 << "." << str3[0] <<"(" << aux.u << ")" <<"->" << str1 << "." << k <<"(" << aux.v << ")" <<endl;
+                   arestas.push_back(aux);
+                   g[aux.u].push_back(make_pair(aux.v,aux.w));
+               }
+           }
+       }
+       //cout << mm["alemao"] << " " << mm["portugues"] << " " << mm["ingles"] << " " << mm["espanhol"] << " " << mm["frances"] << endl;
+       qte*= 27;
+       vector<int>heap;
+        int n, m;
+         int x,i=0;
+         for(i=0;i<qte+1;i++)
+          dist[i]=inf;
+
+         heap.push_back(1);
+         dist[1]=0;
+         make_heap(heap.begin(),heap.end(),comp);
+        while(!heap.empty()) {
+         x=heap[0];
+         pop_heap(heap.begin(), heap.end(), comp);
+         heap.pop_back();
+         for(i=0; i < g[x].size();i++) {
+              if(dist[ g[x][i].first ] > g[x][i].second + dist[x]) {
+                 dist[ g[x][i].first ] = g[x][i].second + dist[x];
+                 heap.push_back( g[x][i].first ); //insere o vertice no heap novamente
+                 push_heap(heap.begin(), heap.end(), comp);//sobe o elemento inserido
+              }
+         }
         }
-      }
+        if(dist[28] == inf)
+          printf("impossivel\n");
+        else
+          printf("%d\n",dist[28]);
     }
-    int o,d;
-    mr[ia] = origem; mm[origem] = ia;
-    o = ia;
-    vertices.push_back(ia);
-    ia++;
-    mr[ia] = destino; mm[destino] = ia;
-    d = ia;
-    vertices.push_back(ia);
-    for(int j = 'a'; j <= 'z'; j++){
-      string str4 = origem, str5 = origem;
-      str5 += '.';
-      str5 += j;
-      aresta aux;
-      aux.u = mm[str4];
-      aux.v = mm[str5];
-      aux.w = 0;
-      edges.push_back(aux);
-      str4 = destino; str5 = destino;
-      str5 += '.';
-      str5 += j;
-      aux.v = mm[str4];
-      aux.u = mm[str5];
-      aux.w = 0;
-      edges.push_back(aux);
-    }
- 
-    int distance[vertices.size()+1];
-    for(int i = 1; i < vertices.size(); i++){
-      distance[i] = inf;
-    }
-    distance[o] = 0;
- 
-    for(int i = 1; i < vertices.size()-1; i++){
-      for(int j = 0; j < edges.size();j++){
-        int u = edges[j].u;
-        int v = edges[j].v;
-        int w = edges[j].w;
-        if(distance[u] + w  < distance[v]){
-          distance[v] = distance[u] + w;
-        }
-      }
-    }
-    if(distance[d] == inf)
-      printf("impossivel\n");
-    else
-      printf("%d\n",distance[d]);
- 
-  }
- 
-  return 0;
+    return 0;
 }

@@ -32,7 +32,7 @@ void init(int n){
 
 int main(){
 	int v,a;
-	scanf("%d%d",&v,&a) != EOF){
+	while(scanf("%d%d",&v,&a) != EOF){
 		init(v);
 		for(int i = 0; i < a; i++){
 			int u, v;

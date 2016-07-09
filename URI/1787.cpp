@@ -7,7 +7,7 @@ bool potencia2(int n){
 
 	while(n >= 2){
 		
-		if(n%2)
+		if(n%2 != 0)
 			return false;
 
 		if(n == 16 || n == 8 || n == 4 || n == 2)

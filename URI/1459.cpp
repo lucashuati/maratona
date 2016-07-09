@@ -22,7 +22,7 @@ int main(){
 		}
 		sort(limites.begin(), limites.end(),comp);
 		for(int i = 0; i < limites.size()-1;i++){
-			if(limites[i+1].x < limites[i].y){
+			if(limites[i+1].x <= limites[i].y){
 				limites[i+1] = limites[i];
 			}else{
 				resp++;

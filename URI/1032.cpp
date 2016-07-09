@@ -47,7 +47,7 @@ int main(){
 			m = primos[i+1];
 			pos = ((pos-1)+m)%qtd;
 		}
-		printf("%d\n",pessoas[0]);
+		cout << pessoas[0] << endl;
 	}
     return 0;
 }
